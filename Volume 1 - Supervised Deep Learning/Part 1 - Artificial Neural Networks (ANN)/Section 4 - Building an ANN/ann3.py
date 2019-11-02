@@ -28,42 +28,6 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-#Importing the keras libraries and packages
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import Dropout #Cancel some nuerouns to minimize overfitting
-
-
-#Initialising the ANN
-classifier = Sequential()
-#Adding the input layer and the first hidden layer
-classifier.add(Dense(6,input_shape = (11,),kernel_initializer='uniform',activation = 'relu'))#First layer, 11 input layers and 6 output layers
-classifier.add(Dropout(rate = 0.1))
-#Adding the second layer
-classifier.add(Dense(6,kernel_initializer='uniform',activation = 'relu'))#Second layer, dont need input layers because know from previous
-classifier.add(Dropout(rate =  0.1))
-#Adding the output layer
-classifier.add(Dense(1,kernel_initializer='uniform',activation = 'sigmoid'))#Last layer, 1 output
-#compiling the ANN
-classifier.compile(optimizer='adam',loss = 'binary_crossentropy',metrics=['accuracy'])
-
-#fitting the ANN to the training set
-classifier.fit(X_train,y_train,batch_size=10,epochs=100)
-
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
-y_pred = (y_pred>0.5)
-
-#Predicting one person
-"France,credit score =600,Male,40,3,60000,2,yes,yes,es salary:5000"
-new_prediction = classifier.predict(sc.transform(np.array([[0,0,600,1,40,3,6000,2,1,1,5000]])))
-new_prediction= (new_prediction>0.5)
-
-
-# Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, y_pred)
 
 
 #Evaluating the ANN
@@ -80,22 +44,4 @@ def build_classifier():
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
     return classifier
 classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
-accuracies = cross_val_score(estimator=classifier,X=X_train,y=y_train,cv=10)
-
-mean = accuracies.mean()#average 
-varieance = accuracies.std()#varience of the average
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+accuracies = cross_val_score(estimator=classifier,X=X_train,y=y_train,cv=10,n_jobs= -1)
