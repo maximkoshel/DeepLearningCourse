@@ -39,7 +39,7 @@ from keras.layers import Dropout #Cancel some nuerouns to minimize overfitting
 classifier = Sequential()
 #Adding the input layer and the first hidden layer
 classifier.add(Dense(6,input_shape = (11,),kernel_initializer='uniform',activation = 'relu'))#First layer, 11 input layers and 6 output layers
-classifier.add(Dropout(rate = 0.1))
+classifier.add(Dropout(rate = 0.1))#Cancel some nuerouns to minimize overfitting
 #Adding the second layer
 classifier.add(Dense(6,kernel_initializer='uniform',activation = 'relu'))#Second layer, dont need input layers because know from previous
 classifier.add(Dropout(rate =  0.1))
@@ -66,8 +66,7 @@ from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
 
-#Evaluating the ANN
-
+#Evaluating the ANN------------------------------------------------------------
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import cross_val_score
 from keras.models import Sequential
@@ -84,10 +83,35 @@ accuracies = cross_val_score(estimator=classifier,X=X_train,y=y_train,cv=10)
 
 mean = accuracies.mean()#average 
 varieance = accuracies.std()#varience of the average
+#------------------------------------------------------------------------------
 
 
 
 
+#Tunning the system for best preformence and then showint the best one --------
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.models import Sequential
+from keras.layers import Dense
+def build_classifier(optimizer):
+    classifier = Sequential()
+    classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 11))
+    classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+    classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', metrics = ['accuracy'])
+    return classifier
+classifier = KerasClassifier(build_fn = build_classifier)
+paramaters = {'batch_size':[25,32],
+              'epochs':[100,500],
+              'optimizer':['adam','rmsprop']}
+
+grid_search = GridSearchCV(estimator = classifier,
+                           param_grid=paramaters,scoring = 'accuracy',
+                           cv=10)
+grid_search = grid_search.fit(X_train,y_train)  
+best_paramater = grid_search.best_params_    #will show the best paramaters to input for best accuracy
+best_accuracy = grid_search.best_score_ #Will show the best accuracy 
+#------------------------------------------------------------------------------
     
     
     
