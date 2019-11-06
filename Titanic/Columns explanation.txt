@@ -1,0 +1,11 @@
+*PassengerIdUnique ID of the passenger
+*PclassPassenger's class (1st, 2nd, or 3rd)
+*NamePassenger's name
+*SexPassenger's sex
+*AgePassenger's age
+*SibSpNumber of siblings/spouses aboard the Titanic
+*ParchNumber of parents/children aboard the Titanic
+*TicketTicket number
+*FareFare paid for ticket
+*CabinCabin number
+*EmbarkedWhere the passenger got on the ship (C - Cherbourg, S - Southampton, Q = Queenstown)
