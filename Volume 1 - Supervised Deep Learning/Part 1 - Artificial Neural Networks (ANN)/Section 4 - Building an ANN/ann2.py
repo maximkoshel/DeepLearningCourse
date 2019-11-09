@@ -81,11 +81,9 @@ def build_classifier():
 classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
 accuracies = cross_val_score(estimator=classifier,X=X_train,y=y_train,cv=10)
 
-mean = accuracies.mean()#average 
+mean = accuracies.mean()#average
 varieance = accuracies.std()#varience of the average
 #------------------------------------------------------------------------------
-
-
 
 
 #Tunning the system for best preformence and then showint the best one --------
@@ -108,18 +106,7 @@ paramaters = {'batch_size':[25,32],
 grid_search = GridSearchCV(estimator = classifier,
                            param_grid=paramaters,scoring = 'accuracy',
                            cv=10)
-grid_search = grid_search.fit(X_train,y_train)  
+grid_search = grid_search.fit(X_train,y_train)
 best_paramater = grid_search.best_params_    #will show the best paramaters to input for best accuracy
-best_accuracy = grid_search.best_score_ #Will show the best accuracy 
+best_accuracy = grid_search.best_score_ #Will show the best accuracy
 #------------------------------------------------------------------------------
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
