@@ -21,8 +21,6 @@ dataset_train['Embarked'].replace('Q','2', inplace=True)
 dataset['Age'].fillna((dataset['Age'].mean()), inplace=True)
 dataset['Age']=dataset['Age'].astype(int)
 dataset['Embarked'].fillna(method='backfill', inplace=True)
-
-
 #Taking care of missing data
 dataset_train['Age'].fillna((dataset_train['Age'].mean()), inplace=True)
 dataset_train['Age']=dataset_train['Age'].astype(int)
@@ -40,15 +38,19 @@ X_test= dataset_train.loc[:,enclude].values #Loading only Relevent information
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 labelencoder_X_Gender = LabelEncoder()
 X[:, 1] = labelencoder_X_Gender.fit_transform(X[:, 1])#Encode Gender 
+X_test[:, 1] = labelencoder_X_Gender.fit_transform(X_test[:, 1])#Encode Gender 
 
 onehotencoder = OneHotEncoder(categorical_features = [6])#Splitting Embarked
 X = onehotencoder.fit_transform(X).toarray()
+X_test = onehotencoder.fit_transform(X_test).toarray()
 X =X[:,1:]#Removing dummy veriable
+X_test =X_test[:,1:]#Removing dummy veriable
 
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 X = sc.fit_transform(X)
+X_test = sc.fit_transform(X_test)
 
 #Evaluating
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -112,4 +114,7 @@ classifier.add(Dense(units = 4, kernel_initializer = 'uniform', activation = 're
 classifier.add(Dense(units = 4, kernel_initializer = 'uniform', activation = 'relu'))
 classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+classifier.fit(X,y,batch_size=32,epochs=500)
 
+new_prediction = classifier.predict(X_test)
+new_prediction= (new_prediction>0.5)
