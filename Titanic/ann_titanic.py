@@ -113,10 +113,9 @@ def build_classifier(optimizer):
 
 classifier = Sequential()
 classifier.add(Dense(units = 4, kernel_initializer = 'uniform', activation = 'relu', input_dim = 8))
-classifier.add(Dense(units = 4, kernel_initializer = 'uniform', activation = 'relu'))
 classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-classifier.fit(X,y,batch_size=32,epochs=500)
+classifier.fit(X,y,batch_size=32,epochs=750)
 
 new_prediction = classifier.predict(X_test)
 new_prediction= (new_prediction>0.5)
