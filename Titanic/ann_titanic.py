@@ -67,17 +67,17 @@ def build_classifier(optimizer):
     classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', metrics = ['accuracy'])
     return classifier
-classifier = KerasClassifier(build_fn = build_classifier)
-paramaters = {'batch_size':[32],
+#classifier = KerasClassifier(build_fn = build_classifier)
+#paramaters = {'batch_size':[32],
               'epochs':[500],
               'optimizer':['adam']}
 
-grid_search = GridSearchCV(estimator = classifier,
-                           param_grid=paramaters,scoring = 'accuracy',
-                           cv=10,)
-grid_search = grid_search.fit(X,y)
-best_paramater = grid_search.best_params_
-best_accuracy = grid_search.best_score_
+#grid_search = GridSearchCV(estimator = classifier,    param_grid=paramaters,scoring = 'accuracy',  cv=10,)
+#grid_search = grid_search.fit(X,y)
+#best_paramater = grid_search.best_params_
+#best_accuracy = grid_search.best_score_
+    
+    
 # (4 Neurons all hidden layers)
 #First evluation -
 #best paramaters : batch_size:32,epochs:500,optimizor:adam, best accuracy 0.820
@@ -120,3 +120,11 @@ classifier.fit(X,y,batch_size=32,epochs=500)
 
 new_prediction = classifier.predict(X_test)
 new_prediction= (new_prediction>0.5)
+
+
+prediction=pd.DataFrame()
+prediction['PassengerId']=dataset_train['PassengerId']
+prediction['Survived'] = new_prediction[:,-1]
+prediction['Survived']=prediction['Survived'].astype(int)
+prediction=pd.DataFrame(prediction)
+prediction.to_csv('prediction.csv', index=False)
