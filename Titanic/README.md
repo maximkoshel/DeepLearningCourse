@@ -9,7 +9,7 @@
 
 * Encoding data
 
-* Evaluating ANN 
+* Evaluating and tunning the ANN 
 
 * Overfitting and droputs 
 
